@@ -142,7 +142,7 @@ def get_chat_url(request):
     -------------------------------------------------------------------AI
     """
 
-    user = User.objects.get(username=request.user)
+    user = get_user_by_name(request.user)
     target_user = User.objects.get(pk=request.POST.get('target_user'))
 
     if user == target_user:
