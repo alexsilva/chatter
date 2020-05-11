@@ -38,6 +38,13 @@ def import_base_template():
         return 'django_chatter/base.html'
 
 
+def get_user_by_name(user):
+    """Validates and returns a user by name"""
+    return User.objects.get(**{
+        User.USERNAME_FIELD: getattr(user, User.USERNAME_FIELD)
+    })
+
+
 class IndexView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -49,7 +56,7 @@ class IndexView(LoginRequiredMixin, View):
             )
         else:
             # create room with the user themselves
-            user = User.objects.get(username=request.user)
+            user = get_user_by_name(self.request.user)
             room_id = create_room([user])
             return HttpResponseRedirect(
                 reverse('django_chatter:chatroom', args=[room_id])
@@ -67,8 +74,8 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         uuid = kwargs.get('uuid')
         try:
-            room = Room.objects.get(id=uuid)
-            user = User.objects.get(username=self.request.user)
+            room = Room.objects.get(pk=uuid)
+            user = get_user_by_name(self.request.user)
         except Exception as e:
             logger.exception("\n\nException in django_chatter.views.ChatRoomView:\n")
             raise Http404("Sorry! What you're looking for isn't here.")
