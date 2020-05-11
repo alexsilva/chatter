@@ -35,7 +35,7 @@ setup(
     install_requires=[
         'channels==2.1.7',
         'bleach==3.1.0',
-        'django>=2.0.9, <3',
+        'django>=1.11.29, <3',
         'channels-redis==2.3.3',
     ]
 )
