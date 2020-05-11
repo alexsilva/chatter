@@ -16,6 +16,8 @@ from django.utils.crypto import constant_time_compare
 
 from django_chatter.models import Room
 
+User = get_user_model()
+
 
 # custom get_user method for AuthMiddleware subclass. Mostly similar to
 # https://github.com/django/channels/blob/master/channels/auth.py
@@ -54,7 +56,7 @@ def get_tenant_user(scope):
         connection.set_tenant(tenant)
         session = Session.objects.get(session_key=session_key)
         uid = session.get_decoded().get(SESSION_KEY)
-        user = get_user_model().objects.get(pk=uid)
+        user = User.objects.get(pk=uid)
 
         # Verifying the session
         # collected from:
@@ -123,8 +125,6 @@ ChatterMTMiddlewareStack = lambda inner: CookieMiddleware(
         )
     )
 )
-
-User = get_user_model()
 
 
 def create_room(user_list):
