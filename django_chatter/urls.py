@@ -8,7 +8,7 @@ app_name = 'django_chatter'
 
 urlpatterns = [
     path('^$', views.IndexView.as_view(), name="index"),
-    path('chat/(?P<uuid>.+)/$', views.ChatRoomView.as_view(), name="chatroom"),
+    path('room/(?P<uuid>.+)/$', views.ChatRoomView.as_view(), name="chatroom"),
 
     # AJAX paths
     path('ajax/users-list/', views.users_list, name="users_list"),
