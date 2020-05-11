@@ -1,10 +1,7 @@
+# coding: utf-8
 from . import views
+from django_chatter.compat import path
 
-try:
-    from django.urls import path
-except ImportError:
-    # django==1.11.xx
-    from django.conf.urls import url as path
 
 # Defined namespace for use on all templates
 app_name = 'django_chatter'
