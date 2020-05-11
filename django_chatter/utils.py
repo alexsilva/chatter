@@ -1,21 +1,21 @@
-from channels.auth import AuthMiddleware
-from channels.sessions import CookieMiddleware, SessionMiddleware
-from channels.db import database_sync_to_async
+import traceback
 
-from django.contrib.sessions.models import Session
-from django.utils.crypto import constant_time_compare
-from django.contrib.auth.models import AnonymousUser
+from channels.auth import AuthMiddleware
+from channels.db import database_sync_to_async
+from channels.sessions import CookieMiddleware, SessionMiddleware
 from django.contrib.auth import (
     get_user_model,
     HASH_SESSION_KEY,
     SESSION_KEY,
 )
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.sessions.models import Session
 from django.db.models import Count
 from django.http import Http404
+from django.utils.crypto import constant_time_compare
 
 from django_chatter.models import Room
 
-import traceback
 
 # custom get_user method for AuthMiddleware subclass. Mostly similar to
 # https://github.com/django/channels/blob/master/channels/auth.py
@@ -130,9 +130,9 @@ def create_room(user_list):
     for user in user_list:
         if type(user) != get_user_model():
             raise TypeError("Parameters passed to create_room doesn't "
-                "match your project's user model. Please make sure the list "
-                "you passed contains valid User objects as defined in your "
-                "settings.AUTH_USER_MODEL parameter.")
+                            "match your project's user model. Please make sure the list "
+                            "you passed contains valid User objects as defined in your "
+                            "settings.AUTH_USER_MODEL parameter.")
     rooms_with_member_count = Room.objects.annotate(num_members = Count('members'))
     rooms = rooms_with_member_count.filter(num_members = len(user_list))
 
