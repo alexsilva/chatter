@@ -50,7 +50,7 @@ class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         rooms_list = Room.objects.filter(members=request.user).order_by('-date_modified')
         if rooms_list.exists():
-            latest_room_uuid = rooms_list[0].id
+            latest_room_uuid = rooms_list[0].pk
             return HttpResponseRedirect(
                 reverse('django_chatter:chatroom', args=[latest_room_uuid])
             )
@@ -108,7 +108,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
                 except IndexError as e:
                     continue
                 if self.request.user not in message.recipients.all():
-                    rooms_with_unread.append(room.id)
+                    rooms_with_unread.append(room.pk)
             context['rooms_list'] = rooms_list
             context['rooms_with_unread'] = rooms_with_unread
 
@@ -159,7 +159,7 @@ def get_chat_url(request):
 @login_required
 def get_messages(request, uuid):
     if request.is_ajax():
-        room = Room.objects.get(id=uuid)
+        room = Room.objects.get(pk=uuid)
         if request.user in room.members.all():
             messages = room.message_set.all()
             page = request.GET.get('page')
