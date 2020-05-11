@@ -91,17 +91,18 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     '''
     async def connect(self):
         self.user = self.scope['user']
-
-        self.room_username_list = [] # Cache room usernames to send alerts
-
+        self.room_username_list = []  # Cache room usernames to send alerts
         self.schema_name = self.scope.get('schema_name', None)
         self.multitenant = self.scope.get('multitenant', False)
+
         for param in self.scope['path'].split('/'):
             try:
                 room_id = UUID(param, version=4)
                 break
             except ValueError:
-                pass
+                continue
+        else:
+            raise Exception("missing 'uuid'")
 
         # Check if the user connecting to the room's websocket belongs in the room
         try:
@@ -144,9 +145,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive_json(self, data):
-        if (data['sender'] != self.user.username)\
-            or data['room_id'] != str(self.room.id):
+    async def receive_json(self, data, **kwargs):
+        if data['sender'] != self.user.username or \
+           data['room_id'] != str(self.room.id):
             await self.disconnect(403)
 
         message_type = data['message_type']
@@ -222,7 +223,7 @@ class AlertConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive_json(self, data):
+    async def receive_json(self, data, **kwargs):
 
         # Check if the data has been sent to this consumer by the currently
         # logged in user
