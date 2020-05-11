@@ -135,14 +135,15 @@ def create_room(user_list):
                             "match your project's user model. Please make sure the list "
                             "you passed contains valid User objects as defined in your "
                             "settings.AUTH_USER_MODEL parameter.")
-    rooms_with_member_count = Room.objects.annotate(num_members=Count('members'))
+    # sql server group by
+    rooms_with_member_count = Room.objects.values("pk", 'members').annotate(num_members=Count('members'))
     rooms = rooms_with_member_count.filter(num_members=len(user_list))
 
     for member in user_list:
         rooms = rooms.filter(members=member)
-    if rooms.exists():
-        room = rooms[0]
-        return room.pk
+    if len(rooms) > 0:
+        room = rooms.first()
+        return room['pk']  # is dict
     else:
         room = Room()
         room.save()
