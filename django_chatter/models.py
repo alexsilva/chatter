@@ -6,7 +6,8 @@ from django.db import models
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
-            on_delete=models.CASCADE, related_name='profile')
+                                on_delete=models.CASCADE,
+                                related_name='profile')
     last_visit = models.DateTimeField()
 
 
@@ -21,8 +22,8 @@ class DateTimeModel(models.Model):
 
 class Room(DateTimeModel):
     id = models.UUIDField(primary_key=True,
-            default=uuid.uuid4,
-            editable=False)
+                          default=uuid.uuid4,
+                          editable=False)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self):
@@ -36,11 +37,12 @@ class Room(DateTimeModel):
 
 class Message(DateTimeModel):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE, related_name='sender')
+                               on_delete=models.CASCADE,
+                               related_name='sender')
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     text = models.TextField()
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        related_name='recipients')
+                                        related_name='recipients')
 
     def __str__(self):
         return f'{self.text} sent by "{self.sender}" in Room "{self.room}"'
