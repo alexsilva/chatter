@@ -17,6 +17,8 @@ from .utils import create_room
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+User = get_user_model()
+
 
 def import_base_template():
     try:
@@ -47,7 +49,7 @@ class IndexView(LoginRequiredMixin, View):
             )
         else:
             # create room with the user themselves
-            user = get_user_model().objects.get(username=request.user)
+            user = User.objects.get(username=request.user)
             room_id = create_room([user])
             return HttpResponseRedirect(
                 reverse('django_chatter:chatroom', args=[room_id])
@@ -66,7 +68,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
         uuid = kwargs.get('uuid')
         try:
             room = Room.objects.get(id=uuid)
-            user = get_user_model().objects.get(username=self.request.user)
+            user = User.objects.get(username=self.request.user)
         except Exception as e:
             logger.exception("\n\nException in django_chatter.views.ChatRoomView:\n")
             raise Http404("Sorry! What you're looking for isn't here.")
@@ -114,7 +116,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
 def users_list(request):
     if request.is_ajax():
         data_array = []
-        for user in get_user_model().objects.all():
+        for user in User.objects.all():
             data_dict = {
                 'id': user.pk,
                 'text': user.username
@@ -133,8 +135,8 @@ def get_chat_url(request):
     -------------------------------------------------------------------AI
     """
 
-    user = get_user_model().objects.get(username=request.user)
-    target_user = get_user_model().objects.get(pk=request.POST.get('target_user'))
+    user = User.objects.get(username=request.user)
+    target_user = User.objects.get(pk=request.POST.get('target_user'))
 
     if user == target_user:
         room_id = create_room([user])
