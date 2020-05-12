@@ -27,3 +27,5 @@ htmlcov
 
 # ignore .coverage file
 .coverage
+
+.idea
