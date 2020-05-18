@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext as _
 
 
 class UserProfile(models.Model):
@@ -35,6 +36,10 @@ class Room(DateTimeModel):
 
         return ", ".join(members_list)
 
+    class Meta:
+        verbose_name = _("Room")
+        verbose_name_plural = _("Rooms")
+
 
 class Message(DateTimeModel):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -50,3 +55,5 @@ class Message(DateTimeModel):
 
     class Meta:
         ordering = ['-id']
+        verbose_name = _("Message")
+        verbose_name_plural = _("Messages")
