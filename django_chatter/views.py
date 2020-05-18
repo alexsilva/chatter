@@ -70,9 +70,9 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
         except Exception as e:
             logger.exception("\n\nException in django_chatter.views.ChatRoomView:\n")
             raise Http404("Sorry! What you're looking for isn't here.")
-        all_members = room.members.all()
         user = self.request.user
-        if user in all_members:
+        all_members = room.members.all()
+        if all_members.filter(pk=user.pk).exists():
             latest_messages_curr_room = room.message_set.all()[:50]
             if latest_messages_curr_room.exists():
                 message = latest_messages_curr_room[0]
@@ -151,8 +151,9 @@ def get_chat_url(request):
 @login_required
 def get_messages(request, uuid):
     if request.is_ajax():
+        user = request.user
         room = Room.objects.get(pk=uuid)
-        if request.user in room.members.all():
+        if room.members.filter(pk=user.pk).exists():
             messages = room.message_set.all()
             page = request.GET.get('page')
 
