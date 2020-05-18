@@ -155,17 +155,16 @@ def get_messages(request, uuid):
         user = request.user
         room = Room.objects.get(pk=uuid)
         if room.members.filter(pk=user.pk).exists():
-            messages = room.message_set.all()
+            messages_qs = room.message_set.all()
             page = request.GET.get('page')
-
-            paginator = Paginator(messages, 20)
+            paginator = Paginator(messages_qs, 20)
             try:
                 selected = paginator.page(page)
             except PageNotAnInteger:
                 selected = paginator.page(1)
             except EmptyPage:
                 selected = []
-            messages_array = []
+            messages = []
             for message in selected:
                 data = {
                     'sender': str(message.sender),
@@ -173,8 +172,8 @@ def get_messages(request, uuid):
                     'received_room_id': uuid,
                     'date_created': message.date_created.strftime("%d %b %Y %H:%M:%S %Z")
                 }
-                messages_array.append(data)
-            return JsonResponse(messages_array, safe=False)
+                messages.append(data)
+            return JsonResponse(messages, safe=False)
 
         else:
             return Http404(_("Sorry! We can't find what you're looking for."))
