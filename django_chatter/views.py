@@ -117,11 +117,11 @@ def users_list(request):
     if request.is_ajax():
         data_array = []
         for user in User.objects.all():
-            data_dict = {
+            data = {
                 'id': user.pk,
                 'text': str(user)
             }
-            data_array.append(data_dict)
+            data_array.append(data)
         return JsonResponse(data_array, safe=False)
 
 
@@ -167,13 +167,13 @@ def get_messages(request, uuid):
                 selected = []
             messages_array = []
             for message in selected:
-                _dict = {
+                data = {
                     'sender': str(message.sender),
                     'message': message.text,
                     'received_room_id': uuid,
                     'date_created': message.date_created.strftime("%d %b %Y %H:%M:%S %Z")
                 }
-                messages_array.append(_dict)
+                messages_array.append(data)
             return JsonResponse(messages_array, safe=False)
 
         else:
