@@ -1,19 +1,15 @@
-from django.test import TestCase, Client
+import pytest
+from channels.testing import WebsocketCommunicator
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.test import TestCase, Client
 
+from chatter.routing import multitenant_application
 from django_chatter.models import Room
 from django_chatter.utils import create_room
-
-from django.conf import settings
-from channels.testing import WebsocketCommunicator
-
-from chatter.routing import application, multitenant_application
-
-import json
-import pytest
-
 from functional_tests.data_setup_for_tests import set_up_data
+
 
 class saveRoomTestCase(TestCase):
     def setUp(self):
@@ -30,7 +26,7 @@ class saveRoomTestCase(TestCase):
         self.assertEqual(room_in_db, room)
 
     def test_create_room_with_invalid_input(self):
-        self.assertRaises(TypeError, lambda: create_room([1,2,3]))
+        self.assertRaises(TypeError, lambda: create_room([1, 2, 3]))
         self.assertRaises(TypeError, lambda: create_room(['1', '2', '2']))
 
     def test_create_room_with_empty_input(self):
@@ -50,6 +46,7 @@ TEST_CHANNEL_LAYERS = {
     },
 }
 
+
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True)
 async def test_no_host_in_headers():
@@ -63,7 +60,8 @@ async def test_no_host_in_headers():
     with pytest.raises(ValueError):
         communicator = WebsocketCommunicator(
             multitenant_application, f"/ws/django_chatter/chatrooms/{room.id}/",
-            )
+        )
+
 
 @pytest.mark.asyncio
 @pytest.mark.django_db(transaction=True)
@@ -78,7 +76,7 @@ async def test_no_session_id_in_headers():
     client.force_login(user=user)
     communicator = WebsocketCommunicator(
         multitenant_application, f"/ws/django_chatter/chatrooms/{room.id}/",
-        headers = [(b'host', b'localhost:8000')]
-        )
+        headers=[(b'host', b'localhost:8000')]
+    )
     with pytest.raises(KeyError):
         connected, subprotocol = await communicator.connect()

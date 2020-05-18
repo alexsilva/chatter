@@ -37,7 +37,7 @@ def get_tenant_user(scope):
     except KeyError as e:
         raise KeyError(
             "The scope does not contain valid cookies to determine user with."
-            )
+        )
     for key, value in scope.get('headers', []):
         if key == b'host':
             hostname = value.decode('ascii').split(':')[0]
@@ -99,7 +99,7 @@ class MTSchemaMiddleware:
                 hostname = value.decode('ascii').split(':')[0]
                 from django_tenants.utils import get_tenant_domain_model
                 domain_model = get_tenant_domain_model()
-                domain = domain_model.objects.select_related('tenant')\
+                domain = domain_model.objects.select_related('tenant') \
                     .get(domain=hostname)
                 try:
                     tenant = domain.tenant

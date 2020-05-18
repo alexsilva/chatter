@@ -1,13 +1,11 @@
+import json
 from django.contrib.auth import get_user_model
 from django.urls import reverse, resolve
-
 from django_tenants.test.cases import TenantTestCase
 from django_tenants.test.client import TenantClient
 
-from django_chatter.views import IndexView, users_list, get_messages
 from django_chatter.models import Room, Message
-
-import json
+from django_chatter.views import IndexView, users_list
 
 
 class TestIndexView(TenantTestCase):
@@ -21,16 +19,15 @@ class TestIndexView(TenantTestCase):
         room = Room.objects.create()
         room.members.add(user)
         message_1 = Message.objects.create(
-                                        sender=user,
-                                        text="first message",
-                                        room=room
-                                        )
+            sender=user,
+            text="first message",
+            room=room
+        )
         message_2 = Message.objects.create(
-                                        sender=user,
-                                        text="last message",
-                                        room=room
-                                        )
-
+            sender=user,
+            text="last message",
+            room=room
+        )
 
     def test_chat_render_view(self):
         logged_in = self.client.login(username="ted", password="dummypassword")
@@ -119,7 +116,7 @@ class TestMessagesFetch(TenantTestCase):
         response = self.client.get(
             f'/ajax/get-messages/{room_uuid}/?page=1',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-            )
+        )
         content = json.loads(response.content)
 
         self.assertEqual(content, messages_array)
@@ -138,7 +135,7 @@ class TestMessagesFetch(TenantTestCase):
         response = self.client.get(
             f'/ajax/get-messages/{room_uuid}/?page=2',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-            )
+        )
         content = json.loads(response.content)
 
         self.assertEqual(content, messages_array)
@@ -146,7 +143,7 @@ class TestMessagesFetch(TenantTestCase):
         response = self.client.get(
             f'/ajax/get-messages/{room_uuid}/?page=3',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-            )
+        )
 
         content = json.loads(response.content)
 

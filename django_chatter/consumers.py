@@ -14,18 +14,18 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 --------------------------------------------------------------------------AI'''
 from .models import Room, Message
 
-
 '''AI--------------------------------------------------------------------------
     Python Imports
 --------------------------------------------------------------------------AI'''
 from uuid import UUID
-
 
 '''
 AI-------------------------------------------------------------------
     Database Access methods below
 -------------------------------------------------------------------AI
 '''
+
+
 @database_sync_to_async
 def get_room(room_id, multitenant=False, schema_name=None):
     if multitenant:
@@ -50,6 +50,8 @@ AI-------------------------------------------------------------------
     5. Set room update time to message date_modified
 -------------------------------------------------------------------AI
 '''
+
+
 @database_sync_to_async
 def save_message(room, sender, text, multitenant=False, schema_name=None):
     if multitenant:
@@ -78,12 +80,12 @@ def save_message(room, sender, text, multitenant=False, schema_name=None):
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
-
     '''
     AI-------------------------------------------------------------------
         WebSocket methods below
     -------------------------------------------------------------------AI
     '''
+
     async def connect(self):
         self.user = self.scope['user']
         self.room_users = []  # Cache room usernames to send alerts
@@ -203,6 +205,7 @@ class AlertConsumer(AsyncJsonWebsocketConsumer):
         WebSocket methods below
     -------------------------------------------------------------------AI
     '''
+
     async def connect(self):
         self.user = self.scope['user']
         self.user_group_name = f'user_{self.user.pk}'
@@ -219,7 +222,6 @@ class AlertConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def receive_json(self, data, **kwargs):
-
         # Check if the data has been sent to this consumer by the currently
         # logged in user
 

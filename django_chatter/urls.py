@@ -1,7 +1,6 @@
 # coding: utf-8
-from . import views
 from django_chatter.compat import path
-
+from . import views
 
 # Defined namespace for use on all templates
 app_name = 'django_chatter'
