@@ -42,7 +42,7 @@ function checkAndFetch() {
         sender = object['sender'];
         received_room_id = object['received_room_id'];
         date_created = dateFormatter(object['date_created']);
-        if (username === sender) {
+        if (user_session.id === sender.id) {
           addSenderMessage(message, sender, received_room_id, date_created, 'prepend');
         }
         else {

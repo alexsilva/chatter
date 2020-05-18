@@ -12,7 +12,7 @@
 var ws_or_wss = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 websocket_url = ws_or_wss + window.location.host
-	+'/ws/django_chatter/users/' + username + '/'; // username variable in chat-window.html
+	+'/ws/django_chatter/users/' + user_session.id + '/'; // user_session variable in chat-window.html
 
 
 

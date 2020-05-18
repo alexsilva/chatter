@@ -175,7 +175,10 @@ def get_messages(request, uuid):
             messages = []
             for message in selected:
                 data = {
-                    'sender': str(message.sender),
+                    'sender': {
+                        '__str__': str(message.sender),
+                        'id': message.sender.pk
+                    },
                     'message': message.text,
                     'received_room_id': uuid,
                     'date_created': message.date_created.strftime("%d %b %Y %H:%M:%S %Z")

@@ -45,7 +45,7 @@
 						Fetch latest 50 messages and display them properly.
 					===========================================================AI-->
 					{% for message in latest_messages_curr_room reversed %}
-						{% if message.sender.username == user.username %}
+						{% if message.sender.pk == user.pk %}
 							<div class="message-container">
 								<div class="message message-sent">
 									{{message.text}}
@@ -95,7 +95,7 @@
 <script>
 	var room_id = '{{room_uuid_json}}';
 	var get_room_url = '{% url "django_chatter:get_messages" uuid=room_uuid_json %}';
-	var username = '{{user.username}}';
+	var user_session = {id: '{{user.pk}}', __str__: '{{user}}'}
 </script>
 <script src = "{% static 'js/dateFormatter.js' %}"></script>
 <script src = "{% static 'js/websocketHelpers.js' %}"></script>

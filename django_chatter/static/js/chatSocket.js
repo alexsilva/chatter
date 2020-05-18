@@ -63,7 +63,7 @@ chatSocket.onmessage=function(e) {
 	$last_room = $('#' + received_room_id);
 	$last_room.parent().prepend($last_room);
 
-	if (username === sender) {
+	if (user_session.id === sender.id) {
 		addSenderMessage(message, sender, received_room_id, date_created, 'append');
 	}
 	else {
@@ -97,7 +97,7 @@ $('#send-button').click( function() {
       'message_type': 'text',
 			'message': message,
 			'room_id': room_id,
-			'sender': username
+			'sender': user_session
 		}));
 	}
 });
