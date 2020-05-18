@@ -11,8 +11,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic.base import TemplateView
 
-from .models import Room
-from .utils import create_room
+from django_chatter.models import Room
+from django_chatter.utils import create_room
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -49,9 +49,9 @@ class IndexView(LoginRequiredMixin, View):
             )
         else:
             # create room with the user themselves
-            room_id = create_room([self.request.user])
+            room = create_room([self.request.user])
             return HttpResponseRedirect(
-                reverse('django_chatter:chatroom', args=[room_id])
+                reverse('django_chatter:chatroom', args=[room.pk])
             )
 
 
@@ -138,11 +138,11 @@ def get_chat_url(request):
     target_user = User.objects.get(pk=request.POST.get('target_user'))
 
     if user == target_user:
-        room_id = create_room([user])
+        room = create_room([user])
     else:
-        room_id = create_room([user, target_user])
+        room = create_room([user, target_user])
     return HttpResponseRedirect(
-        reverse('django_chatter:chatroom', args=[room_id])
+        reverse('django_chatter:chatroom', args=[room.pk])
     )
 
 
