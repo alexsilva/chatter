@@ -31,6 +31,9 @@ class Room(DateTimeModel):
                                      related_name='members')
 
     def __str__(self):
+        if self.name:
+            return self.name
+
         memberset = self.members.all()
         members_list = []
         for member in memberset:

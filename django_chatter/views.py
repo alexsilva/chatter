@@ -83,7 +83,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
             elif all_members.count() == 2:
                 room_name = all_members.exclude(pk=user.pk)[0]
             else:
-                room_name = room.__str__()
+                room_name = str(room)
             context['room_uuid_json'] = kwargs.get('uuid')
             context['latest_messages_curr_room'] = latest_messages_curr_room
             context['room_name'] = room_name
