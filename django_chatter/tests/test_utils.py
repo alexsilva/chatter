@@ -25,9 +25,9 @@ class saveRoomTestCase(TestCase):
         user1 = User.objects.get(username="user1")
         user2 = User.objects.get(username="user2")
         user3 = User.objects.get(username="user3")
-        room_id = create_room([user1, user2, user3])
+        room = create_room([user1, user2, user3])
         room_in_db = Room.objects.all()[0]
-        self.assertEqual(room_in_db.id, room_id)
+        self.assertEqual(room_in_db, room)
 
     def test_create_room_with_invalid_input(self):
         self.assertRaises(TypeError, lambda: create_room([1,2,3]))
@@ -39,9 +39,9 @@ class saveRoomTestCase(TestCase):
     def test_creating_existing_room(self):
         user1 = User.objects.get(username="user1")
         user2 = User.objects.get(username="user2")
-        room_id = create_room([user1, user2])
-        new_room_id = create_room([user1, user2])
-        self.assertEqual(new_room_id, room_id)
+        room = create_room([user1, user2])
+        new_room = create_room([user1, user2])
+        self.assertEqual(new_room, room)
 
 
 TEST_CHANNEL_LAYERS = {

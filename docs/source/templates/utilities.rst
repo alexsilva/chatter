@@ -100,8 +100,8 @@ Chatter has the following utilities available:
     def my_view(request):
       user1 = request.user  # User requesting the view
       user2 = User.objects.get(username="user2")  # example user in your db
-      room_id = create_room([user1, user2])
-      return chatroom(request, room_id)
+      room = create_room([user1, user2])
+      return chatroom(request, room)
 
   The above code would create a room from your view, and direct the user to the
   newly formed room.
