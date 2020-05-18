@@ -25,6 +25,8 @@ class Room(DateTimeModel):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
+    name = models.CharField("Name", max_length=350,
+                            null=True, blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      related_name='members')
 
