@@ -8,44 +8,42 @@
           | <Month> <Day>, <Year> 12:00AM if time - timeNow > 7 days
 */
 
-function dateFormatter (string) {
-  inputTime = new Date(Date.parse(string));
-  timeNow = new Date(Date.now());
-  difference = convertMS(timeNow - inputTime);
-  var options = {};
-  if (difference["days"] > 7) {
-    // days > 7
-    options = {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true
-    };
-    return inputTime.toLocaleDateString('en-US', options);
-  }
-  else {
-    if (sameDay(inputTime, timeNow)) {
-      // "same day"
-      options = {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true
-      };
-      return inputTime.toLocaleTimeString('en-US', options);
+function dateFormatter(string) {
+    inputTime = new Date(Date.parse(string));
+    timeNow = new Date(Date.now());
+    difference = convertMS(timeNow - inputTime);
+    var options = {};
+    if (difference["days"] > 7) {
+        // days > 7
+        options = {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true
+        };
+        return inputTime.toLocaleDateString('en-US', options);
+    } else {
+        if (sameDay(inputTime, timeNow)) {
+            // "same day"
+            options = {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true
+            };
+            return inputTime.toLocaleTimeString('en-US', options);
+        } else {
+            // "0 < days < 7"
+            options = {
+                weekday: "short",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true
+            }
+            return inputTime.toLocaleTimeString('en-US', options);
+        }
     }
-    else {
-      // "0 < days < 7"
-      options = {
-        weekday: "short",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true
-      }
-      return inputTime.toLocaleTimeString('en-US', options);
-    }
-  }
 }
 
 
@@ -59,12 +57,12 @@ function convertMS(ms) {
     m = m % 60;
     d = Math.floor(h / 24);
     h = h % 24;
-    return { days: d, hours: h, minutes: m, seconds: s };
+    return {days: d, hours: h, minutes: m, seconds: s};
 };
 
 // Taken from https://stackoverflow.com/questions/43855166/how-to-tell-if-two-dates-are-in-the-same-day
 function sameDay(d1, d2) {
-  return d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate();
+    return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
 }

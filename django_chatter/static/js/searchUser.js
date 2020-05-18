@@ -18,30 +18,30 @@ AI-------------------------------------------------------------------
 	the list
 -------------------------------------------------------------------AI
 */
-$(function() {
+$(function () {
 
-	$.ajax({
-		//The url to send the request to
-		// url: '/chat/ajax/users-list/',
-		url: get_user_url,
-		/*If the request succeeds, there is data sent back from
-		the server in JSON format: [{'id': int, 'text': str}...]*/
-		success: function( data ) {
-			// populate(data.userslist);
-			// linkuser(data.userslist);
-			$('.select-chat-user').select2({
-				placeholder: 'Start chat',
-				data: data,
-				width: 'resolve',
-			});
-		}
-	});
+    $.ajax({
+        //The url to send the request to
+        // url: '/chat/ajax/users-list/',
+        url: get_user_url,
+        /*If the request succeeds, there is data sent back from
+        the server in JSON format: [{'id': int, 'text': str}...]*/
+        success: function (data) {
+            // populate(data.userslist);
+            // linkuser(data.userslist);
+            $('.select-chat-user').select2({
+                placeholder: 'Start chat',
+                data: data,
+                width: 'resolve',
+            });
+        }
+    });
 });
 
 
 // If no option is selected in the user search form, then do nothing
-$('.search-form').submit(function(e) {
-	if ($('.select-chat-user option:selected').text() == "") {
-		e.preventDefault();
-	}
+$('.search-form').submit(function (e) {
+    if ($('.select-chat-user option:selected').text() == "") {
+        e.preventDefault();
+    }
 });

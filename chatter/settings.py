@@ -16,7 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, 'static/')
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -28,14 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['.django-chatter.dev', '127.0.0.1', 'localhost']
 
-
 # Application definition
 
 # Multitenant settings
 SHARED_APPS = (
     'django_tenants',
-    'tenants', # configuration folder with tenant model
-    'django_chatter', # actual reusable app
+    'tenants',  # configuration folder with tenant model
+    'django_chatter',  # actual reusable app
     'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,7 +48,7 @@ TENANT_APPS = (
 )
 
 INSTALLED_APPS = list(SHARED_APPS) + \
-    [app for app in TENANT_APPS if app not in SHARED_APPS]
+                 [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 # INSTALLED_APPS = [
 #     'django_chatter',
@@ -100,10 +98,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chatter.wsgi.application'
 
-#For channels server to take over
+# For channels server to take over
 ASGI_APPLICATION = 'chatter.routing.application'
 
-#Channel layers to enable multiple instances of same consumer to communicate
+# Channel layers to enable multiple instances of same consumer to communicate
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -134,7 +132,6 @@ DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
 )
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -153,7 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -166,7 +162,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -191,7 +186,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console',],
+            'handlers': ['console', ],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'django_chatter.views': {

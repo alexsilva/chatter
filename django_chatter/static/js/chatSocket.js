@@ -13,8 +13,7 @@ AI-------------------------------------------------------------------
 var ws_or_wss = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 websocket_url = ws_or_wss + window.location.host
-	+'/ws/django_chatter/chatrooms/' + room_id + '/';
-
+    + '/ws/django_chatter/chatrooms/' + room_id + '/';
 
 
 /*
@@ -24,12 +23,12 @@ AI-------------------------------------------------------------------
 	that are sent back from the server.
 -------------------------------------------------------------------AI
 */
-var chatSocket =  new WebSocket(
-	websocket_url
+var chatSocket = new WebSocket(
+    websocket_url
 );
 //Notify when the websocket is connected.
-chatSocket.onopen = function(e) {
-	console.log('Websocket connected.');
+chatSocket.onopen = function (e) {
+    console.log('Websocket connected.');
 }
 
 /*
@@ -52,52 +51,51 @@ AI-------------------------------------------------------------------
 		of the dialog to the latest messages that have been sent.
 -------------------------------------------------------------------AI
 */
-chatSocket.onmessage=function(e) {
-	var data = JSON.parse(e.data);
-	var message = data['message'];
-	var sender = data['sender'];
-	var received_room_id = data['room_id'];
-  var date_created = dateFormatter(data['date_created']);
+chatSocket.onmessage = function (e) {
+    var data = JSON.parse(e.data);
+    var message = data['message'];
+    var sender = data['sender'];
+    var received_room_id = data['room_id'];
+    var date_created = dateFormatter(data['date_created']);
 
-	// Below line adds the current chatroom to the top
-	$last_room = $('#' + received_room_id);
-	$last_room.parent().prepend($last_room);
+    // Below line adds the current chatroom to the top
+    $last_room = $('#' + received_room_id);
+    $last_room.parent().prepend($last_room);
 
-	if (user_session.id === sender.id) {
-		addSenderMessage(message, sender, received_room_id, date_created, 'append');
-	}
-	else {
-		$last_room.find('.chat-list-item').css('font-weight', 'bold');
-		addOpponentMessage(message, sender, received_room_id, date_created, 'append');
-	}
-	document.getElementById('chat-dialog').scrollTop
-	= document.getElementById('chat-dialog').scrollHeight;
+    if (user_session.id === sender.id) {
+        addSenderMessage(message, sender, received_room_id, date_created, 'append');
+    } else {
+        $last_room.find('.chat-list-item').css('font-weight', 'bold');
+        addOpponentMessage(message, sender, received_room_id, date_created, 'append');
+    }
+    document.getElementById('chat-dialog').scrollTop
+        = document.getElementById('chat-dialog').scrollHeight;
 }
 
 //Notify when the websocket closes abruptly.
-chatSocket.onclose=function() {
-	console.log('WebSocket disconnected.');
-	//setTimeout(function(){startWebSocket(websocket_url)}, 5000);
+chatSocket.onclose = function () {
+    console.log('WebSocket disconnected.');
+    //setTimeout(function(){startWebSocket(websocket_url)}, 5000);
 }
 
 //When the enter key is pressed on the textarea, trigger a click
 //on the Send button.
-$('#send-message').keyup(function(e) {
-	if (e.which === 13) {
-		$('#send-button').trigger('click');
-	}
+$('#send-message').keyup(function (e) {
+    if (e.which === 13) {
+        $('#send-button').trigger('click');
+    }
 });
 
 //When the Send button is clicked, check if its just an empty message (i.e. only spaces).
 //If it is, don't send the message. Otherwise, send it to the websocket.
-$('#send-button').click( function() {
-	if ($.trim($("#send-message").val())) {
-		var message = $('#send-message').val();
-		chatSocket.send(JSON.stringify({
-      'message_type': 'text',
-			'message': message,
-			'room_id': room_id,
-			'sender': user_session
-		}));
-	}
+$('#send-button').click(function () {
+    if ($.trim($("#send-message").val())) {
+        var message = $('#send-message').val();
+        chatSocket.send(JSON.stringify({
+            'message_type': 'text',
+            'message': message,
+            'room_id': room_id,
+            'sender': user_session
+        }));
+    }
 });

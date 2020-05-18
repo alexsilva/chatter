@@ -1,18 +1,14 @@
+import os
+import time
 from channels.testing import ChannelsLiveServerTestCase
-
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-
-import time
-import os
 
 from .data_setup_for_tests import set_up_data
 
-from django_chatter.models import Room
-
 MAX_WAIT = 5
+
 
 class ChatterFunctionalTest(ChannelsLiveServerTestCase):
     serve_static = True
@@ -38,16 +34,16 @@ class ChatterFunctionalTest(ChannelsLiveServerTestCase):
             self.browser = webdriver.Chrome()
             self.browser.set_window_size(1600, 900)
         else:
-            self.browser = webdriver.Chrome(options = chrome_options)
+            self.browser = webdriver.Chrome(options=chrome_options)
 
         self.domain_home = 'http://localhost' + ':' + \
-                self.live_server_url.split(':')[-1]
+                           self.live_server_url.split(':')[-1]
 
     def tearDown(self):
         self.browser.quit()
 
     def test_get_homepage_url(self):
-        print ("test getting homepage and sending message")
+        print("test getting homepage and sending message")
         self.browser.get(self.domain_home)
         username_field = self.browser.find_element_by_id('id_username')
         password_field = self.browser.find_element_by_id('id_password')
@@ -56,11 +52,10 @@ class ChatterFunctionalTest(ChannelsLiveServerTestCase):
         password_field.send_keys("dummypassword")
         send_button.click()
         self.wait_for(lambda:
-            self.assertEqual(
-                self.browser.title,
-                "Notes to Yourself | Chatter")
-        )
-
+                      self.assertEqual(
+                          self.browser.title,
+                          "Notes to Yourself | Chatter")
+                      )
 
     # An explicit wait method that waits for page to fully load before
     # the assertion function it's running passes. Throws exception
