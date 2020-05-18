@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic.base import TemplateView
@@ -127,6 +128,7 @@ def users_list(request):
 class ChartUrlView(View):
     http_method_names = ['post']
 
+    @method_decorator(login_required)
     def post(self, request):
         url = self.get_url(request)
         if request.is_ajax():
