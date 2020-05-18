@@ -167,7 +167,7 @@ def get_messages(request, uuid):
             messages_array = []
             for message in selected:
                 _dict = {
-                    'sender': message.sender.username,
+                    'sender': str(message.sender),
                     'message': message.text,
                     'received_room_id': uuid,
                     'date_created': message.date_created.strftime("%d %b %Y %H:%M:%S %Z")
