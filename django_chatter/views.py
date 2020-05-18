@@ -110,10 +110,9 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
             raise Http404(_("Sorry! What you're looking for isn't here."))
 
 
-# The following functions deal with AJAX requests
-
 @login_required
 def users_list(request):
+    """The following functions deal with AJAX requests"""
     if request.is_ajax():
         data_array = []
         for user in User.objects.all():
