@@ -12,6 +12,6 @@ urlpatterns = [
 
     # AJAX paths
     path('ajax/users-list/', views.users_list, name="users_list"),
-    path('ajax/get-chat-url/', views.get_chat_url, name="get_chat_url"),
+    path('ajax/get-chat-url/', views.ChartUrlView.as_view(), name="get_chat_url"),
     path('ajax/get-messages/(?P<uuid>.+)/$', views.get_messages, name="get_messages")
 ]

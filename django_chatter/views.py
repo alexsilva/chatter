@@ -1,6 +1,5 @@
 # import the logging library
 import logging
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -8,9 +7,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.utils.translation import gettext as _
 
 from django_chatter.models import Room
 from django_chatter.utils import create_room
@@ -125,32 +124,40 @@ def users_list(request):
         return JsonResponse(data_array, safe=False)
 
 
-@login_required
-def get_chat_url(request):
-    """
-    AI-------------------------------------------------------------------
+class ChartUrlView(View):
+    http_method_names = ['post']
+
+    def post(self, request):
+        url = self.get_url(request)
+        if request.is_ajax():
+            response = JsonResponse({'url': url})
+        else:
+            response = HttpResponseRedirect(url)
+        return response
+
+    def get_room(self, request):
+        """
         Use the util room creation function to create room for one/two
         user(s). This can be extended in the future to add multiple users
         in a group chat.
-    -------------------------------------------------------------------AI
-    """
+        """
+        user = request.user
+        target_user = User.objects.get(pk=request.POST.get('target_user'))
 
-    user = request.user
-    target_user = User.objects.get(pk=request.POST.get('target_user'))
+        if user == target_user:
+            room = create_room([user])
+        else:
+            room = create_room([user, target_user])
+        return room
 
-    if user == target_user:
-        room = create_room([user])
-    else:
-        room = create_room([user, target_user])
-    return HttpResponseRedirect(
-        reverse('django_chatter:chatroom', args=[room.pk])
-    )
+    def get_url(self, request):
+        room = self.get_room(request)
+        return reverse('django_chatter:chatroom', args=[room.pk])
 
-
-# Ajax request to fetch earlier messages
 
 @login_required
 def get_messages(request, uuid):
+    """Ajax request to fetch earlier messages"""
     if request.is_ajax():
         user = request.user
         room = Room.objects.get(pk=uuid)
