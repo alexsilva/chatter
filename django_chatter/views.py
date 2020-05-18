@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.urls import reverse
 from django.views import View
 from django.views.generic.base import TemplateView
+from django.utils.translation import gettext as _
 
 from django_chatter.models import Room
 from django_chatter.utils import create_room
@@ -69,7 +70,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
             room = Room.objects.get(pk=uuid)
         except Exception as e:
             logger.exception("\n\nException in django_chatter.views.ChatRoomView:\n")
-            raise Http404("Sorry! What you're looking for isn't here.")
+            raise Http404(_("Sorry! What you're looking for isn't here."))
         user = self.request.user
         all_members = room.members.all()
         if all_members.filter(pk=user.pk).exists():
@@ -78,7 +79,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
                 message = latest_messages_curr_room[0]
                 message.recipients.add(user)
             if all_members.count() == 1:
-                room_name = "Notes to Yourself"
+                room_name = _("Notes to Yourself")
             elif all_members.count() == 2:
                 room_name = all_members.exclude(pk=user.pk)[0]
             else:
@@ -106,7 +107,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
 
             return context
         else:
-            raise Http404("Sorry! What you're looking for isn't here.")
+            raise Http404(_("Sorry! What you're looking for isn't here."))
 
 
 # The following functions deal with AJAX requests
@@ -176,6 +177,6 @@ def get_messages(request, uuid):
             return JsonResponse(messages_array, safe=False)
 
         else:
-            return Http404("Sorry! We can't find what you're looking for.")
+            return Http404(_("Sorry! We can't find what you're looking for."))
     else:
-        return Http404("Sorry! We can't find what you're looking for.")
+        return Http404(_("Sorry! We can't find what you're looking for."))
