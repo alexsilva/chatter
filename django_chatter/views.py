@@ -90,7 +90,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
             context['base_template'] = import_base_template()
 
             # Add rooms with unread messages
-            rooms_list = Room.objects.filter(members=self.request.user) \
+            rooms_list = Room.objects.filter(members__in=[user]) \
                              .order_by('-date_modified')[:10]
             rooms_with_unread = []
             # Go through each list of rooms and check if the last message was unread
@@ -100,7 +100,7 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
                     message = room.message_set.all().order_by('-id')[0]
                 except IndexError as e:
                     continue
-                if self.request.user not in message.recipients.all():
+                if not message.recipients.filter(pk=user.pk).exists():
                     rooms_with_unread.append(room.pk)
             context['rooms_list'] = rooms_list
             context['rooms_with_unread'] = rooms_with_unread
