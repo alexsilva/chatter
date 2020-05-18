@@ -119,7 +119,7 @@ def users_list(request):
         for user in User.objects.all():
             data_dict = {
                 'id': user.pk,
-                'text': user.username
+                'text': str(user)
             }
             data_array.append(data_dict)
         return JsonResponse(data_array, safe=False)
