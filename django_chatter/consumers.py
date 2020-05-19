@@ -55,7 +55,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.user = self.scope['user']
-        self.room_users = []  # Cache room usernames to send alerts
         self.schema_name = self.scope.get('schema_name', None)
         self.multitenant = self.scope.get('multitenant', False)
 
@@ -81,9 +80,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                             self.channel_name
                         )
                         await self.accept()
-
-                        for user in self.room.members.all():
-                            self.room_users.append(user.pk)
                     else:
                         await self.disconnect(403)
             else:
@@ -94,9 +90,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         self.channel_name
                     )
                     await self.accept()
-
-                    for user in self.room.members.all():
-                        self.room_users.append(user.pk)
                 else:
                     await self.disconnect(403)
         except Exception as ex:
@@ -145,7 +138,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 }
             )
 
-            for user_pk in self.room_users:
+            for user_pk in self.room.members_pks_cache:
                 if user_pk != self.user.pk:
                     await self.channel_layer.group_send(
                         f'user_{user_pk}',
