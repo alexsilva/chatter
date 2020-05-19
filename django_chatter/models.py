@@ -1,3 +1,4 @@
+# coding: utf-8
 import uuid
 
 from django.conf import settings
@@ -39,6 +40,12 @@ class Room(DateTimeModel):
         for member in memberset:
             members_list.append(str(member))
         return ", ".join(members_list)
+
+    def is_member(self, user):
+        """Checks whether the user is a member of the room
+        :rtype bool
+        """
+        return self.members.filter(pk=user.pk).exists()
 
     class Meta:
         verbose_name = _("Room")
