@@ -16,9 +16,9 @@ def get_room(room_id, multitenant=False, schema_name=None):
         else:
             from django_tenants.utils import schema_context
             with schema_context(schema_name):
-                return Room.objects.get(id=room_id)
+                return Room.objects.get(pk=room_id)
     else:
-        return Room.objects.get(id=room_id)
+        return Room.objects.get(pk=room_id)
 
 
 @database_sync_to_async
