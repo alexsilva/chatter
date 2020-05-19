@@ -1,29 +1,9 @@
-'''AI--------------------------------------------------------------------------
-    Django Imports
---------------------------------------------------------------------------AI'''
-
-'''AI--------------------------------------------------------------------------
-    Third-party Imports
---------------------------------------------------------------------------AI'''
 import bleach
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-
-'''AI--------------------------------------------------------------------------
-    App Imports
---------------------------------------------------------------------------AI'''
-from .models import Room, Message
-
-'''AI--------------------------------------------------------------------------
-    Python Imports
---------------------------------------------------------------------------AI'''
 from uuid import UUID
 
-'''
-AI-------------------------------------------------------------------
-    Database Access methods below
--------------------------------------------------------------------AI
-'''
+from django_chatter.models import Room, Message
 
 
 @database_sync_to_async
@@ -39,17 +19,6 @@ def get_room(room_id, multitenant=False, schema_name=None):
                 return Room.objects.get(id=room_id)
     else:
         return Room.objects.get(id=room_id)
-
-
-'''
-AI-------------------------------------------------------------------
-    1. Select the Room
-    2. Select the user who sent the message
-    3. Select the message to be saved
-    4. Save message
-    5. Set room update time to message date_modified
--------------------------------------------------------------------AI
-'''
 
 
 @database_sync_to_async
@@ -80,11 +49,9 @@ def save_message(room, sender, text, multitenant=False, schema_name=None):
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
-    '''
-    AI-------------------------------------------------------------------
+    """
         WebSocket methods below
-    -------------------------------------------------------------------AI
-    '''
+    """
 
     async def connect(self):
         self.user = self.scope['user']
@@ -200,11 +167,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
 
 class AlertConsumer(AsyncJsonWebsocketConsumer):
-    '''
-    AI-------------------------------------------------------------------
+    """
         WebSocket methods below
-    -------------------------------------------------------------------AI
-    '''
+    """
 
     async def connect(self):
         self.user = self.scope['user']
