@@ -124,7 +124,7 @@ def users_list(request):
         return JsonResponse(data_array, safe=False)
 
 
-class ChartUrlView(View):
+class ChatUrlView(View):
     http_method_names = ['post']
 
     @method_decorator(login_required)
