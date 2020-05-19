@@ -127,7 +127,7 @@ ChatterMTMiddlewareStack = lambda inner: CookieMiddleware(
 )
 
 
-def create_room(user_list):
+def create_room(user_list, **kwargs):
     """Takes in a list of User objects and returns the UUID of the room created"""
     for user in user_list:
         if not isinstance(user, User):
@@ -144,7 +144,7 @@ def create_room(user_list):
     room = rooms.first()
 
     if not room:
-        room = Room()
+        room = Room(**kwargs)
         room.save()
         room.members.set(user_list)
         room.save()
