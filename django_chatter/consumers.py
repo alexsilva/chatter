@@ -74,7 +74,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             if self.multitenant:
                 from django_tenants.utils import schema_context
                 with schema_context(self.schema_name):
-                    if self.room.members.filter(pk=self.user.pk).exists():
+                    if self.room.is_member(self.user):
                         self.room_group_name = f'chat_{self.room.pk}'
                         await self.channel_layer.group_add(
                             self.room_group_name,
@@ -87,7 +87,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     else:
                         await self.disconnect(403)
             else:
-                if self.room.members.filter(pk=self.user.pk).exists():
+                if self.room.is_member(self.user):
                     self.room_group_name = f'chat_{self.room.pk}'
                     await self.channel_layer.group_add(
                         self.room_group_name,
