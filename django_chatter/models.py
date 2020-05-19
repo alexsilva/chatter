@@ -3,6 +3,7 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
 
 
@@ -46,6 +47,10 @@ class Room(DateTimeModel):
         :rtype bool
         """
         return self.members.filter(pk=user.pk).exists()
+
+    @cached_property
+    def members_pks_cache(self):
+        return list(self.members.value_list('pk', flat=True))
 
     class Meta:
         verbose_name = _("Room")
