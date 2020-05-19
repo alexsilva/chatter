@@ -50,7 +50,7 @@ class Room(DateTimeModel):
 
     @cached_property
     def members_pks_cache(self):
-        return list(self.members.value_list('pk', flat=True))
+        return list(self.members.values_list('pk', flat=True))
 
     class Meta:
         verbose_name = _("Room")
