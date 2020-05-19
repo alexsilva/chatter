@@ -142,8 +142,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     def validate_session(self, data):
-        return data['sender']['id'] != self.user.pk or \
-               data['room_id'] != str(self.room.pk)
+        return data['sender']['id'] == self.user.pk or \
+               data['room_id'] == str(self.room.pk)
 
     async def receive_json(self, data, **kwargs):
         if not self.validate_session(data):
