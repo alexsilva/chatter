@@ -35,12 +35,16 @@ class Room(DateTimeModel):
     def __str__(self):
         if self.name:
             return self.name
-
-        memberset = self.members.all()
+        members_limit = 20
+        members_qs = self.get_members_all()
+        members_total = members_qs.count()
         members_list = []
-        for member in memberset:
+        for member in members_qs[:members_limit]:
             members_list.append(str(member))
-        return ", ".join(members_list)
+        s = ", ".join(members_list)
+        if members_total > members_limit:
+            s += "..."
+        return s
 
     def is_member(self, user):
         """Checks whether the user is a member of the room
