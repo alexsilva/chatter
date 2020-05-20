@@ -102,7 +102,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     def validate_session(self, data):
-        return data['sender']['id'] == self.user.pk or \
+        return data['sender']['id'] == self.user.pk and \
                data['room_id'] == str(self.room.pk)
 
     async def receive_json(self, data, **kwargs):
