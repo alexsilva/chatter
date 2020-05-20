@@ -3,7 +3,20 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
+
+
+def get_text_field(**kwargs):
+    """It allows to customize the field in order to make it html for example"""
+    config = getattr(settings, "CHATTER_TEXTFIELD_CONFIG", {})
+    config.setdefault('field', "django.db.models.TextField")
+    config.setdefault('attributes', {})
+    text_field = import_string(config['field'])
+    attributes = config['attributes']
+    for key in kwargs:
+        attributes.setdefault(key, kwargs[key])
+    return text_field(**attributes)
 
 
 class UserProfile(models.Model):
@@ -79,7 +92,7 @@ class Message(DateTimeModel):
     room = models.ForeignKey(Room,
                              verbose_name=_("room"),
                              on_delete=models.CASCADE)
-    text = models.TextField(verbose_name=_("text"))
+    text = get_text_field(verbose_name=_("text"))
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                         verbose_name=_("recipients"),
                                         related_name='recipients')
