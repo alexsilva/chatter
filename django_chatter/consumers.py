@@ -170,6 +170,8 @@ class AlertConsumer(AsyncJsonWebsocketConsumer):
     """
         WebSocket methods below
     """
+    user = None
+    user_group_name = None
 
     async def connect(self):
         self.user = self.scope['user']
