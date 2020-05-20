@@ -98,7 +98,7 @@ class Message(DateTimeModel):
                                         related_name='recipients')
 
     def __str__(self):
-        return _(f'{self.text} sent by "{self.sender}" in Room "{self.room}"')
+        return _(f'sent by "{self.sender}" in room "{self.room}"')
 
     class Meta:
         ordering = ['-id']
