@@ -15,8 +15,10 @@ class UserProfile(models.Model):
 
 # This model is used to give date and time when a message was created/modified.
 class DateTimeModel(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(verbose_name=_("date created"),
+                                        auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("date modified"),
+                                         auto_now=True)
 
     class Meta:
         abstract = True
@@ -26,9 +28,11 @@ class Room(DateTimeModel):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    name = models.CharField("Name", max_length=350,
+    name = models.CharField(verbose_name=_("name"),
+                            max_length=350,
                             null=True, blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     verbose_name=_("members"),
                                      related_name='members')
 
     def __str__(self):
@@ -69,11 +73,15 @@ class Room(DateTimeModel):
 
 class Message(DateTimeModel):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               verbose_name=_("sender"),
                                on_delete=models.CASCADE,
                                related_name='sender')
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    text = models.TextField()
+    room = models.ForeignKey(Room,
+                             verbose_name=_("room"),
+                             on_delete=models.CASCADE)
+    text = models.TextField(verbose_name=_("text"))
     recipients = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                        verbose_name=_("recipients"),
                                         related_name='recipients')
 
     def __str__(self):
