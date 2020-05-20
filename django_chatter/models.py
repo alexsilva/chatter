@@ -48,9 +48,16 @@ class Room(DateTimeModel):
         """
         return self.members.filter(pk=user.pk).exists()
 
-    @cached_property
-    def members_pks_cache(self):
-        return list(self.members.values_list('pk', flat=True))
+    def get_members_all(self, excluding=None, pks=False):
+        """Returns all members of the room following the configuration criteria"""
+        members = self.members
+        if excluding is None:
+            members = members.all()
+        else:
+            members = members.exclude(**excluding)
+        if pks:
+            members = members.values_list('pk', flat=pks)
+        return members
 
     class Meta:
         verbose_name = _("Room")

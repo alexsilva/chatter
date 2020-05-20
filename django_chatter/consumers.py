@@ -52,6 +52,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     """
         WebSocket methods below
     """
+    user = None
+    schema_name = None
+    multitenant = None
+    room_group_name = None
+    room = None
 
     async def connect(self):
         self.user = self.scope['user']
@@ -138,22 +143,22 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 }
             )
 
-            for user_pk in self.room.members_pks_cache:
-                if user_pk != self.user.pk:
-                    await self.channel_layer.group_send(
-                        f'user_{user_pk}',
-                        {
-                            'type': 'receive_json',
-                            'message_type': 'text',
-                            'message': self.message_safe,
-                            'date_created': time,
-                            'sender': {
-                                'id': self.user.pk,
-                                '__str__': str(self.user)
-                            },
-                            'room_id': room_id,
-                        }
-                    )
+            for user_pk in self.room.get_members_all(excluding={'pk': self.user.pk},
+                                                     pks=True):
+                await self.channel_layer.group_send(
+                    f'user_{user_pk}',
+                    {
+                        'type': 'receive_json',
+                        'message_type': 'text',
+                        'message': self.message_safe,
+                        'date_created': time,
+                        'sender': {
+                            'id': self.user.pk,
+                            '__str__': str(self.user)
+                        },
+                        'room_id': room_id,
+                    }
+                )
 
     async def send_to_websocket(self, event):
         await self.send_json(event)
