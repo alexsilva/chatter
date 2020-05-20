@@ -118,13 +118,15 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         if message_type == "text":
             message = data['message']
             room_id = data['room_id']
+            html = data.get('html', True)
 
             # Clean code off message if message contains code
-            self.message_safe = bleach.clean(message)
+            if not html:
+                message = bleach.clean(message)
 
             time = await save_message(self.room,
                                       self.user,
-                                      self.message_safe,
+                                      message,
                                       self.multitenant,
                                       self.schema_name)
             time = time.strftime("%d %b %Y %H:%M:%S %Z")
@@ -133,7 +135,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 {
                     'type': 'send_to_websocket',
                     'message_type': 'text',
-                    'message': self.message_safe,
+                    'message': message,
                     'date_created': time,
                     'sender': {
                         'id': self.user.pk,
@@ -150,7 +152,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     {
                         'type': 'receive_json',
                         'message_type': 'text',
-                        'message': self.message_safe,
+                        'message': message,
                         'date_created': time,
                         'sender': {
                             'id': self.user.pk,
