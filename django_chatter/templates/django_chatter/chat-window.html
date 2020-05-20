@@ -48,7 +48,7 @@
                 {% if message.sender.pk == user.pk %}
                 <div class="message-container">
                     <div class="message message-sent">
-                        {{message.text}}
+                        {{message.text|safe}}
                     </div>
                     <div class="message message-sent message-date-created">
                         {{message.date_created|date:"d M Y H:i:s e"}}
@@ -61,7 +61,7 @@
                             {{message.sender|make_list|first|title}}
                         </div>
                         <div class="message message-received">
-                            {{message.text}}
+                            {{message.text|safe}}
                         </div>
                     </div>
                     <div class="message message-received message-date-created
