@@ -33,9 +33,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        'channels==2.1.7',
-        'bleach==3.1.0',
         'django>=1.11.29, <3',
-        'channels-redis==2.3.3',
+        'channels==2.3.1',
+        'channels-redis==2.4.2',
+        'bleach==3.1.0',
     ]
 )
