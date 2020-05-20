@@ -62,9 +62,17 @@ class ChatRoomView(LoginRequiredMixin, TemplateView):
     """
     template_name = 'django_chatter/chat-window.html'
 
+    def get_websocket_url(self):
+        ws_url = getattr(settings, "CHATTER_WEBSOCKET_URL", None)
+        if ws_url is None:
+            protocol = "wss://" if self.request.is_secure() else "ws://"
+            ws_url = protocol + self.request.get_host()
+        return ws_url
+
     # This gets executed whenever a room exists
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['websocket_base_url'] = self.get_websocket_url()
         uuid = kwargs.get('uuid')
         try:
             room = Room.objects.get(pk=uuid)

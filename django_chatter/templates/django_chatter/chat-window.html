@@ -92,10 +92,12 @@
     ===========================================================AI-->
 </div>
 </div>
-<script>
+<script type="application/javascript">
+    //Global variable to modify HREF to tailor to secure or non-secure connections.
+    var websocket_base_url = "{{websocket_base_url}}";
     var room_id = '{{room_uuid_json}}';
     var get_room_url = '{% url "django_chatter:get_messages" uuid=room_uuid_json %}';
-    var user_session = {id: {{user.pk}}, __str__: '{{user}}'}
+    var user_session = {id: {{user.pk}}, __str__: '{{user}}'};
 </script>
 <script src="{% static 'js/dateFormatter.js' %}"></script>
 <script src="{% static 'js/websocketHelpers.js' %}"></script>
