@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import Group
 
 
 def get_text_field(**kwargs):
@@ -47,6 +48,10 @@ class Room(DateTimeModel):
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      verbose_name=_("members"),
                                      related_name='members')
+
+    members_groups = models.ManyToManyField(Group,
+                                            verbose_name=_("members groups"),
+                                            related_name='members_groups')
 
     def __str__(self):
         if self.name:
