@@ -71,14 +71,15 @@ class Room(DateTimeModel):
         """Checks whether the user is a member of the room
         :rtype bool
         """
-        return self.members.filter(pk=user.pk).exists()
+        return self.members.filter(pk=user.pk).exists() or \
+               self.members_groups.filter(user__pk=user.pk).exists()
 
     def get_members_all(self, excluding=None, pks=False):
         """Returns all members of the room following the configuration criteria"""
-        members = self.members
-        if excluding is None:
-            members = members.all()
-        else:
+        members = self.members.union(
+            self.members.model.objects.filter(
+                groups=self.members_groups.all()))
+        if excluding is not None:
             members = members.exclude(**excluding)
         if pks:
             members = members.values_list('pk', flat=pks)
