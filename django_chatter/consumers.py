@@ -139,7 +139,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     'date_created': time,
                     'sender': {
                         'id': self.user.pk,
-                        '__str__': str(self.user)
+                        'name': str(self.user)
                     },
                     'room_id': room_id,
                 }
@@ -156,7 +156,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'date_created': time,
                         'sender': {
                             'id': self.user.pk,
-                            '__str__': str(self.user)
+                            'name': str(self.user)
                         },
                         'room_id': room_id,
                     }

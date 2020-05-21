@@ -184,7 +184,7 @@ def get_messages(request, uuid):
             for message in selected:
                 data = {
                     'sender': {
-                        '__str__': str(message.sender),
+                        'name': str(message.sender),
                         'id': message.sender.pk
                     },
                     'message': message.text,

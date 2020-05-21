@@ -37,7 +37,7 @@ function updateOpponentMessagePreview(room_id, sender, message) {
     // Update the message preview on the chatoom-list
     $("#" + room_id)
         .find('.chat-list-last-message')
-        .text(sender.__str__ + ": " + message);
+        .text(sender.name + ": " + message);
 }
 
 
@@ -131,7 +131,7 @@ function addOpponentMessage(
                 addMessageContainerDiv(
                     '<div class="message-received-container">'
                     + '<div class="receiver-bubble">'
-                    + sender.__str__.charAt(0).toUpperCase()
+                    + sender.name.charAt(0).toUpperCase()
                     + '</div>'
                     + '<div class = "message message-received received-reduced-top-margin">'
                     + message
@@ -147,7 +147,7 @@ function addOpponentMessage(
             $('#chat-dialog').append(
                 addMessageContainerDiv('<div class="message-received-container">'
                     + '<div class="receiver-bubble">'
-                    + sender.__str__.charAt(0).toUpperCase()
+                    + sender.name.charAt(0).toUpperCase()
                     + '</div>'
                     + addMessageReceivedContainerDiv(message)
                     + '</div>'
@@ -170,7 +170,7 @@ function addOpponentMessage(
                 addMessageContainerDiv(
                     '<div class="message-received-container">'
                     + '<div class="receiver-bubble">'
-                    + sender.__str__.charAt(0).toUpperCase()
+                    + sender.name.charAt(0).toUpperCase()
                     + '</div>'
                     + '<div class = "message message-received received-reduced-bottom-margin">'
                     + message
@@ -186,7 +186,7 @@ function addOpponentMessage(
             $('#chat-dialog').prepend(
                 addMessageContainerDiv('<div class="message-received-container">'
                     + '<div class="receiver-bubble">'
-                    + sender.__str__.charAt(0).toUpperCase()
+                    + sender.name.charAt(0).toUpperCase()
                     + '</div>'
                     + addMessageReceivedContainerDiv(message)
                     + '</div>'

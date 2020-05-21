@@ -39,7 +39,7 @@ class RoomTestCase(TestCase):
             rooms = rooms.filter(members=member)
         if rooms.exists():
             room = rooms[0]
-        self.assertEqual(room.__str__(), "user0, user1, user2")
+        self.assertEqual(str(room), "user0, user1, user2")
 
     def test_invalid_room_id(self):
         print('testing room creation exception with invalid room id')
@@ -59,5 +59,5 @@ class MessageTestCase(TestCase):
 
     def test_message_title(self):
         print('testing message titles')
-        self.assertEqual(Message.objects.all()[0].__str__(),
+        self.assertEqual(str(Message.objects.all()[0]),
                          'Notes to myself sent by "user0" in Room "user0"')
