@@ -47,11 +47,13 @@ class Room(DateTimeModel):
                             null=True, blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      verbose_name=_("members"),
-                                     related_name='members')
+                                     related_name='members',
+                                     blank=True)
 
     members_groups = models.ManyToManyField(Group,
                                             verbose_name=_("members groups"),
-                                            related_name='members_groups')
+                                            related_name='members_groups',
+                                            blank=True)
 
     def __str__(self):
         if self.name:
