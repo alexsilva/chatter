@@ -80,7 +80,7 @@ class Room(DateTimeModel):
         """Returns all members of the room following the configuration criteria"""
         members = self.members.union(
             self.members.model.objects.filter(
-                groups=self.members_groups.all()))
+                groups__in=self.members_groups.all()))
         if excluding is not None:
             members = members.exclude(**excluding)
         if pks:
