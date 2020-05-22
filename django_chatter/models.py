@@ -45,6 +45,9 @@ class Room(DateTimeModel):
     name = models.CharField(verbose_name=_("name"),
                             max_length=350,
                             null=True, blank=True)
+    # deactivated rooms should not appear in lists.
+    enabled = models.BooleanField(verbose_name="enabled", default=True)
+
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      verbose_name=_("members"),
                                      related_name='members',
