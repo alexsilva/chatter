@@ -109,6 +109,6 @@ class Message(DateTimeModel):
         return _(f'sent by "{self.sender}" in room "{self.room}"')
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-date_created']
         verbose_name = _("Message")
         verbose_name_plural = _("Messages")
