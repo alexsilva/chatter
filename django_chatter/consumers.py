@@ -124,19 +124,19 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             if not html:
                 message = bleach.clean(message)
 
-            time = await save_message(self.room,
-                                      self.user,
-                                      message,
-                                      self.multitenant,
-                                      self.schema_name)
-            time = time.strftime("%d %b %Y %H:%M:%S %Z")
+            created = await save_message(self.room,
+                                         self.user,
+                                         message,
+                                         self.multitenant,
+                                         self.schema_name)
+            created = created.isoformat()
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'send_to_websocket',
                     'message_type': 'text',
                     'message': message,
-                    'date_created': time,
+                    'date_created': created,
                     'sender': {
                         'id': self.user.pk,
                         'name': str(self.user)
@@ -153,7 +153,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'type': 'receive_json',
                         'message_type': 'text',
                         'message': message,
-                        'date_created': time,
+                        'date_created': created,
                         'sender': {
                             'id': self.user.pk,
                             'name': str(self.user)
